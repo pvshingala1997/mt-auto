@@ -1,0 +1,41 @@
+name: "Pull Request Opened"
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+    - "main"
+
+jobs:
+  PRInfo:
+    name: "Gather PR Info"
+    runs-on: [self-hosted, linux, x64, philips-code-hub, ubuntu-latest]
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      statuses: write
+    outputs:
+      envname: ${{ steps.prinfo.outputs.prenv }}
+      base_folder: ${{ steps.prinfo.outputs.base_folder }}
+      region: "us-east-1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+          
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: "us-east-1" 
+          role-to-assume: ${{vars.AWS_ROLE}}
+          role-session-name: "GitHubActions-${{ github.actor }}"
+      
+      - name: Run AWS Commands
+        id: awscmd
+        run: |
+          aws ec2 describe-instances --region us-west-2 
+
+      - name: Cleanup
+        id: clean
+        run: |
+          rm -rf ~/.aws
