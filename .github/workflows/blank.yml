@@ -8,7 +8,7 @@ on:
 jobs:
   PRInfo:
     name: "Gather PR Info"
-    runs-on: [self-hosted, linux, x64, ubuntu-latest]
+    runs-on: [ubuntu-latest]
     permissions:
       id-token: write
       contents: write
