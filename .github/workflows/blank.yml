@@ -33,7 +33,7 @@ jobs:
       - name: Run AWS Commands
         id: awscmd
         run: |
-          aws ec2 describe-instances --region us-west-2 
+          aws ec2 describe-instances --region us-east-1
 
       - name: Cleanup
         id: clean
